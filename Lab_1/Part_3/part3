@@ -1,0 +1,50 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description:
+--Part 3 of lab 1 creates a VHDL entity with the purpose of creating a two bit wide 3-to-1 
+--multiplexer with a select input s0 and s1. Select inputs are connected to SW9-8 and SW5-0 
+--provide the three two inputs u, v, and w. All possible values are assigned to "s" signal 
+--to then evaluate the value of the select expression. The value is then compared with the 
+--values of the choices. All SW active switches are connected to LEDR5-0 and m outputto LEDG1-0.
+--Inputs: SW9-8 and SW5-0 
+--Outputs: LEDR5-0 and LEDG1-0
+--****************************************************************
+
+LIBRARY ieee;
+USE ieee.STD_LOGIC_1164.ALL;
+
+ENTITY part3 IS
+     PORT( 
+          SW   : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+          LEDR : OUT STD_LOGIC_VECTOR(9 DOWNTO 0);
+          LEDG : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
+          );
+END part3;
+
+ARCHITECTURE Behavior OF part3 IS
+
+SIGNAL u, v, w, s: STD_LOGIC_VECTOR(1 DOWNTO 0);
+SIGNAL m0, m1    : STD_LOGIC_VECTOR(1 DOWNTO 0);
+
+
+
+BEGIN
+
+     s <= SW(9 DOWNTO 8);
+     u <= SW(1 DOWNTO 0);
+     v <= SW(3 DOWNTO 2);     
+     w <= SW(5 DOWNTO 4);
+     
+     LEDR(1 DOWNTO 0) <= u;
+     LEDR(3 DOWNTO 2) <= v;     
+     LEDR(5 DOWNTO 4) <= w;
+     LEDR(9 DOWNTO 8) <= s;
+     LEDG(1 DOWNTO 0) <= m1;
+     
+     m0(0) <= (NOT(s(1)) AND u(0)) OR (s(1) AND v(0));
+     m1(0) <= (NOT(s(0)) AND m0(0)) OR (s(0) AND w(0)); 
+     m0(1) <= (NOT(s(1)) AND u(1)) OR (s(1) AND v(1)); 
+     m1(1) <= (NOT(s(0)) AND m0(1)) OR (s(0) AND w(1));   
+
+END Behavior;
