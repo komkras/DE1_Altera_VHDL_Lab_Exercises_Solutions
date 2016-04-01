@@ -1,0 +1,46 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description:
+--Inputs: 
+--Outputs: 
+--****************************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+ENTITY shiftreg_lb IS 
+	PORT( 
+          clk     : IN STD_LOGIC;
+          init    : IN STD_LOGIC;
+          reset   : IN STD_LOGIC;
+          load_in : IN STD_LOGIC;
+          data_in : IN STD_LOGIC_VECTOR(11 DOWNTO 0);
+          shf_out : OUT STD_LOGIC
+          );	
+END shiftreg_lb;
+
+ARCHITECTURE behavioral OF shiftreg_lb IS
+
+SIGNAL shf_in   : STD_LOGIC;
+SIGNAL data_gen : STD_LOGIC_VECTOR(11 DOWNTO 0);
+SIGNAL cnt_gen  : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+BEGIN
+     
+     shf_in <= '0';
+     
+     PROCESS(clk, reset, data_in, data_gen, load_in, init)
+
+     BEGIN
+          IF reset = '0' THEN
+               data_gen <= (OTHERS => '0');
+          ELSIF init = '0' THEN
+               IF load_in = '1' THEN
+                    data_gen <= data_in;
+               END IF;
+          ELSIF RISING_EDGE(clk) THEN
+               data_gen <= data_gen(10 DOWNTO 0) & shf_in;
+          END IF;
+     END PROCESS;
+     shf_out <=data_gen(11);
+END behavioral;                 
