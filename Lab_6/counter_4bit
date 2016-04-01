@@ -1,0 +1,33 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+
+ENTITY counter_4bit IS
+     PORT(
+          clk      : IN STD_LOGIC;
+          reset    : IN STD_LOGIC;
+          data_in  : IN STD_LOGIC;
+          data_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)          
+          );
+END counter_4bit;
+
+ARCHITECTURE behavioral OF counter_4bit IS
+
+SIGNAL count : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+BEGIN
+     PROCESS(clk, reset, data_in)
+          BEGIN
+               IF reset = '0' THEN
+                    count <= "0000";
+               ELSIF data_in = '1' THEN
+                    IF RISING_EDGE(clk) THEN
+                         count <= count + 1;
+                    END IF;
+               END IF;
+     END PROCESS;
+     
+data_out <= count;
+     
+END behavioral;
