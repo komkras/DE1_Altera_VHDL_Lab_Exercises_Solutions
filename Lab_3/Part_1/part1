@@ -1,0 +1,43 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: This design creates a RS latch circuit using boolean logic.
+
+-- E | S | R |   Q   | Q_bar |
+-- --|---|---|-------|-------|
+-- 0 | 0 | 0 | latch | latch |
+-- 0 | 0 | 1 | latch | latch |
+-- 0 | 1 | 0 | latch | latch |
+-- 0 | 1 | 1 | latch | latch |
+-- 1 | 0 | 0 | latch | latch |
+-- 1 | 0 | 1 |   0   |   1   |
+-- 1 | 1 | 0 |   1   |   0   |
+-- 1 | 1 | 1 |   0   |   0   |
+-- ---------------------------
+--Inputs: KEY1-0
+--Outputs: LEDR9
+--****************************************************************
+Library IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+ENTITY part1_top_level IS
+	PORT( 
+		KEY  : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+		LEDR : OUT STD_LOGIC_VECTOR(9 DOWNTO 8)
+		);
+END part1_top_level;
+
+ARCHITECTURE structure OF part1_top_level IS
+
+     COMPONENT part1
+          PORT(
+               d, clk : IN STD_LOGIC;
+               q      : OUT STD_LOGIC
+               );
+     END COMPONENT;
+
+BEGIN
+
+d_latch : part1 PORT MAP (KEY(0), KEY(1), LEDR(9));
+
+END structure;
