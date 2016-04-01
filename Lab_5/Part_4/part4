@@ -1,0 +1,46 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description:
+--Inputs: 
+--Outputs: 
+--****************************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE WORK.ALL;
+
+ENTITY part4 IS
+     PORT(
+          SW       : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+          KEY      : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+          CLOCK_50 : IN STD_LOGIC;
+          LEDR     : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := "00"
+          );
+END part4;
+
+ARCHITECTURE structural OF part4 IS
+
+SIGNAL out_f0      : STD_LOGIC;
+SIGNAL shf_out     : STD_LOGIC;
+SIGNAL to_ledr     : STD_LOGIC;
+SIGNAL mag_out0    : STD_LOGIC;
+SIGNAL cnt_out0    : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+
+SIGNAL letter_out  : STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+SIGNAL letter_bus  : STD_LOGIC_VECTOR(11 DOWNTO 0);
+SIGNAL cnt_mag_bus : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+BEGIN
+
+letter_bus  <= letter_out(11 DOWNTO 0);
+cnt_mag_bus <= letter_out(15 DOWNTO 12);
+
+clock_div  : freq_divider0  PORT MAP(KEY(0), CLOCK_50, out_f0); 
+letter_sw  : letter_selet   PORT MAP(SW(2 DOWNTO 0), letter_out);
+shf_reg    : shiftreg_rb    PORT MAP(out_f0, KEY(1), KEY(0), mag_out0, letter_bus, LEDR(0));
+comparator : mag_comparator PORT MAP(cnt_out0, cnt_mag_bus, mag_out0);
+counter0   : cnt_2bit       PORT MAP(out_f0, KEY(0), mag_out0, cnt_mag_bus, cnt_out0);
+
+END structural;
