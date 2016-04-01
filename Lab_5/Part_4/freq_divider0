@@ -1,0 +1,48 @@
+--***************************************************************
+--name: Carlos Virguez
+--Course Number: CET3136
+--Description: BCD for switch inputs
+--Inputs: 
+--Outputs: 
+--***************************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+ 
+ENTITY freq_divider0 IS
+     PORT( 
+          reset : IN STD_LOGIC;
+		clk   : IN STD_LOGIC;     
+          out_f : OUT STD_LOGIC
+         );
+END freq_divider0;
+ 
+ARCHITECTURE behavioral OF freq_divider0 IS
+
+CONSTANT max_count : NATURAL := 25000000; 
+
+SIGNAL instant : STD_LOGIC;
+ 
+BEGIN
+
+     PROCESS(reset, clk, instant)
+
+          VARIABLE count : NATURAL RANGE 0 TO max_count;
+
+     BEGIN
+          IF reset = '0' THEN
+               count := 0;
+               instant <= '0';
+          ELSIF RISING_EDGE(clk) THEN
+               IF count >= max_count THEN
+                    instant <= '1'; 
+                    count := 0;
+               ELSE
+                    count := count + 1;  
+                    instant <= '0';
+               END IF;  
+          END IF;       
+     END PROCESS;
+     out_f <= instant;
+END behavioral;
