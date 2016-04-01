@@ -1,0 +1,67 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: Testbench
+--Inputs: en(Enable), clr(Clear), clk(Clock)
+--Outputs: q 
+--****************************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+
+ENTITY part4_tb IS
+END part4_tb; 
+
+ARCHITECTURE tb_architecture OF part4_tb IS
+
+SIGNAL en_tb       : STD_LOGIC := '0'; --Stimulus signal
+SIGNAL clk_tb      : STD_LOGIC := '0';--Stimulus signal
+SIGNAL clr_tb      : STD_LOGIC := '0';--Stimulus signal
+SIGNAL count_tb    : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";--Observed signal
+SIGNAL end_sim     : BOOLEAN := FALSE;
+
+CONSTANT PERIOD : TIME := 100ns;
+
+COMPONENT part4 IS
+     PORT(
+          en, clr, clk : IN STD_LOGIC;
+          count        : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+         );
+END COMPONENT;
+
+BEGIN 
+     cpu_clock_gen : clk_tb <= NOT clk_tb AFTER PERIOD/2 WHEN end_sim = FALSE ELSE UNAFFECTED;
+     clr_gen : clr_tb <= '0', '1' AFTER 2 * PERIOD;
+     
+     monitor : PROCESS
+     
+          CONSTANT n : INTEGER := 4; --Number of bits in the counter
+     
+     BEGIN
+          FOR i IN 1 TO 2 LOOP --Skip two clocks cycles while counter is reset
+               WAIT UNTIL clk_tb = '1';
+          END LOOP;
+          
+          WAIT FOR 1ns;
+          
+          -- Verify counter's output after each clock
+          
+          FOR i IN 0 TO 2**n LOOP --Count until clock rolls over to 0
+               --The exponential symbol is denoted with (**) 
+               --and to_unsigned convert the integer index value
+               --to vector length n.
+               ASSERT count_tb = (STD_LOGIC_VECTOR(TO_UNSIGNED(i MOD 2**n, n)))
+               --INTEGER'IMAGE converts the loop index to a string equal to 
+               --the index value. Parameters(Integer to convert, length of returned unsigned vector)
+               REPORT "Count of " & INTEGER'IMAGE(i MOD 2**n) & " failed"
+               SEVERITY ERROR;
+               WAIT UNTIL clk_tb = '1';
+               WAIT FOR 1ns;
+          END LOOP;
+          end_sim <= TRUE;
+          WAIT;
+     END PROCESS;
+     
+     cnt : part4 PORT MAP(en_tb, clr_tb, clk_tb, count_tb);
+     
+END tb_architecture;
