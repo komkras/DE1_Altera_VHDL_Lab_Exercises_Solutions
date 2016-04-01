@@ -1,0 +1,26 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description:
+--Part 1 of lab 1 creates a VHDL entity with the 
+--purpose of connecting simple input and output 
+--devices to a FPGA chip  and assigns all 
+--corresponding pins for the DE1 board. 
+--Individual LEDs turn on while the toggle switch is 1 
+--and off while toggle shitch is 0.
+--Inputs: SW9-0 
+--Outputs: LEDR9-0
+--****************************************************************
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+ENTITY part1 IS
+	PORT ( SW : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+		LEDR : OUT STD_LOGIC_VECTOR(9 DOWNTO 0));
+END part1;
+
+ARCHITECTURE Behavior OF part1 IS
+	BEGIN
+		LEDR <= SW;
+END Behavior;
