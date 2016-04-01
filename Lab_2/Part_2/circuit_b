@@ -1,0 +1,33 @@
+--********************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: This design is used as a sub-branch design to the top-level design. 
+--With comparator output of 1, circuit_b turns on HEX1 to 1 and if zero, HEX1 dispalys 
+--a decimal value of 0. With val will yiels corresponding single bit value. 
+--Inputs: cir_b_in STD_LOGIC
+--Outputs: HEX1
+--********************************************************************
+
+LIBRARY ieee;
+USE ieee.STD_LOGIC_1164.ALL;
+
+ENTITY circuit_b IS
+     PORT(
+          cir_b_in  : IN STD_LOGIC;
+          HEX1      : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+          );
+END circuit_b;
+
+ARCHITECTURE behavioral OF circuit_b IS
+BEGIN
+     
+     PROCESS(cir_b_in)
+          BEGIN
+               IF cir_b_in = '1' THEN
+                    HEX1 <= "1001111";
+               ELSE
+                    HEX1 <= "0000001";
+               END IF;
+     END PROCESS;
+END behavioral; 
+               
