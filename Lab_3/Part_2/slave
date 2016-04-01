@@ -1,0 +1,33 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description:
+--Inputs: SW9 and SW7-0 
+--Outputs: LEDR9-0 and LEDG3-0
+--****************************************************************
+Library IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+ENTITY slave IS
+	PORT( 
+		d, clk : IN STD_LOGIC;
+		q	  : OUT STD_LOGIC
+		);	
+END slave;
+
+ARCHITECTURE dataflow OF slave IS
+
+	SIGNAL  s, r, s_g, r_g, qa, qb : STD_LOGIC;
+	
+     ATTRIBUTE keep : boolean;
+	ATTRIBUTE keep OF s, r, s_g, r_g, qa, qb : SIGNAL IS true;
+          
+          BEGIN
+               s_g <= NOT(s AND clk);
+               r_g <= NOT(r AND clk);
+               qa  <= NOT(s_g AND qb);
+               qb  <= NOT(r_g AND qa);
+               q   <= qa;
+               s   <= d;
+               r   <= NOT d;
+END dataflow;
