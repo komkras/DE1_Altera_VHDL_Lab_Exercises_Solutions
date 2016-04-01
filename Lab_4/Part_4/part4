@@ -1,0 +1,36 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: 4-bit counter with enable and clear
+--Inputs:
+--Outputs:
+--****************************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+ENTITY part4 IS
+     PORT(
+          en, clr, clk : IN STD_LOGIC;
+          count        : OUT STD_LOGIC
+         );
+END part4;
+
+ARCHITECTURE behavioral OF part4 IS
+
+     SIGNAL sig0, sig1, sig2, sig3  : STD_LOGIC; 
+          
+          COMPONENT t_flip_flop IS
+               PORT(
+                    en_ff, clr_ff, clk_ff : IN STD_LOGIC;
+                    q_ff                  : OUT STD_LOGIC
+                    );
+          END COMPONENT;
+BEGIN
+     counter0 : t_flip_flop PORT MAP(en, (NOT clr), clk, sig0);
+     counter1 : t_flip_flop PORT MAP((en AND sig0), (NOT clr), clk, sig1);
+     counter2 : t_flip_flop PORT MAP((en AND sig1), (NOT clr), clk, sig2);
+     counter3 : t_flip_flop PORT MAP((en AND sig2), (NOT clr), clk, sig3);
+     
+     count <= sig3;
+     
+END behavioral;
