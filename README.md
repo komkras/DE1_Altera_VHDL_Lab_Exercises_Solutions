@@ -1,1 +1,1 @@
-# DE1_Altera_VHDL_Lab_Excercises
+# DE1_Altera_VHDL_Lab_Exercises
