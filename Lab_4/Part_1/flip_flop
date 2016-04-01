@@ -1,0 +1,35 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: T Flip Flop using behavioral technique
+--Inputs: en(Enable), clr(Clear), clk(Clock)
+--Outputs: q 
+--****************************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+ENTITY flip_flop IS
+     PORT(
+          en, clr, clk : IN STD_LOGIC;
+          q            : OUT STD_LOGIC
+         );
+END flip_flop; 
+
+ARCHITECTURE behavioral OF flip_flop IS
+
+SIGNAL q_sig : STD_LOGIC;
+
+     BEGIN
+     PROCESS(en, clr, clk, q_sig)
+     BEGIN
+          IF RISING_EDGE(clk) THEN
+               IF en = '1' AND clr ='1' THEN
+                    q_sig <= NOT q_sig;
+               END IF;
+          END IF;
+          IF clr = '0' THEN
+               q_sig <= '0';
+          END IF;
+     END PROCESS;
+     q <= q_sig;
+END behavioral;
