@@ -1,0 +1,50 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description:
+--Part 2 of lab 1 creates a VHDL entity with the purpose of creating a four bit wide 
+--2-to-1 multiplexer with a select input s. If s = 0 the multiplexer's output m is 
+--equal to the input x, and if s = 1 the output is equal to y. SW9 is assigned to 
+--s input, SW3-0 as the x input and SW7-4 as the y input. All switches are connected
+--to LEDR9-0 as well. Logical operation on array elements was used by indexing specific 
+--element.
+--The entity accomplishes the "m <= (NOT(s) AND x) OR (s AND y)"
+--statement of corresponding elements from four (4) inputs.
+--m output are connected to LEDG3-0
+--Inputs: SW9 and SW7-0 
+--Outputs: LEDR9-0 and LEDG3-0
+--****************************************************************
+
+LIBRARY ieee;
+USE ieee.STD_LOGIC_1164.ALL;
+
+ENTITY part2 IS
+    PORT(  
+        SW   : IN STD_LOGIC_VECTOR(9 DOWNTO 0); 
+        LEDR : OUT STD_LOGIC_VECTOR(9 DOWNTO 0);
+        LEDG : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        );       
+END part2;
+
+ARCHITECTURE datafloW OF part2 IS
+
+SIGNAL       s : STD_LOGIC; 
+SIGNAL x, y, m : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+BEGIN
+
+    s <= SW(9);					
+    x <= SW(3 DOWNTO 0);
+	y <= SW(7 DOWNTO 4);
+    LEDG <= m;
+
+    LEDR(9) <= s;
+	LEDR(3 DOWNTO 0) <= x;
+	LEDR(7 DOWNTO 4) <= y;
+     
+    M(3) <= (NOT(s) AND X(3)) OR (s AND y(3));
+    M(2) <= (NOT(s) AND X(2)) OR (s AND y(2)); 
+    M(1) <= (NOT(s) AND X(1)) OR (s AND y(1)); 
+    M(0) <= (NOT(s) AND X(0)) OR (s AND y(0));  
+     
+END dataflow; 
