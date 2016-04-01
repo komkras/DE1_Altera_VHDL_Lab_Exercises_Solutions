@@ -1,0 +1,31 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+ENTITY disp_7seg IS
+     PORT(
+          data_in    : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+          data_out   : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)          
+          );
+END disp_7seg;
+
+ARCHITECTURE behavioral OF disp_7seg IS
+
+BEGIN
+
+     PROCESS(data_in)
+          BEGIN
+          CASE data_in IS
+               WHEN "0000" => data_out <= "1000000";--0
+               WHEN "0001" => data_out <= "1111001";--1
+               WHEN "0010" => data_out <= "0100100";--2
+               WHEN "0011" => data_out <= "0110000";--3
+               WHEN "0100" => data_out <= "0011001";--4
+               WHEN "0101" => data_out <= "0010010";--5
+               WHEN "0110" => data_out <= "0000010";--6
+               WHEN "0111" => data_out <= "1111000";--7
+               WHEN OTHERS => data_out <= "1111111";--0
+          END CASE;
+     END PROCESS;
+     
+END behavioral;
