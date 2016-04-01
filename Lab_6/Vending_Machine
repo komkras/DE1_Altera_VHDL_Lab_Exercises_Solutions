@@ -1,0 +1,52 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+
+ENTITY vend_mach IS
+     PORT(
+          clk        : IN STD_LOGIC;
+          reset      : IN STD_LOGIC;
+          data_in    : IN INTEGER RANGE 0 TO 100 := 0;
+          data_out   : BUFFER INTEGER RANGE 0 to 100 := 0;
+          z_out      : OUT STD_LOGIC;
+          active_led : OUT STD_LOGIC;
+          reject_led : OUT STD_LOGIC          
+          );
+END vend_mach;
+
+ARCHITECTURE behavioral OF vend_mach IS
+
+SIGNAL reg_adder_bus : INTEGER RANGE 0 TO 100 := 0;
+SIGNAL out_z         : STD_LOGIC;
+SIGNAL active_sig    : STD_LOGIC;
+SIGNAL reject_sig    : STD_LOGIC;
+
+BEGIN   
+     PROCESS(clk, reset, reg_adder_bus, data_in)
+          BEGIN
+               IF reset = '0' THEN
+                    data_out <= 0;
+                    active_sig <= '1';
+                    reject_sig <= '0';
+                    out_z <= '0';
+               ELSIF data_out < 30 AND reset = '1' THEN
+                    IF RISING_EDGE(clk) THEN
+                         data_out <= data_in + reg_adder_bus;
+                         active_sig <= '1';
+                         reject_sig <= '0';
+                         out_z <= '0'; 
+                    END IF;
+               ELSIF data_out > 29 THEN
+                    out_z <= '1';
+                    active_sig <= '0';
+                    reject_sig <= '1';
+               END IF;
+     END PROCESS; 
+     
+reg_adder_bus <= data_out;
+z_out <= out_z;
+active_led <= active_sig; 
+reject_led <= reject_sig; 
+ 
+END behavioral;
