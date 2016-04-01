@@ -1,0 +1,26 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+ENTITY freq_divider IS
+	PORT(
+		CLK_50 : IN STD_LOGIC;
+		freq_out : OUT STD_LOGIC
+          );	
+END freq_divider;
+
+ARCHITECTURE behavioral OF freq_divider IS
+	
+	SIGNAL q_sig : STD_LOGIC_VECTOR(25 DOWNTO 0);
+     BEGIN
+     PROCESS(CLK_50, q_sig)
+     BEGIN
+          IF RISING_EDGE(CLK_50) THEN
+               q_sig <= q_sig + 1;
+          END IF;
+     END PROCESS;
+     
+     freq_out <= q_sig(25);
+     
+END behavioral;
