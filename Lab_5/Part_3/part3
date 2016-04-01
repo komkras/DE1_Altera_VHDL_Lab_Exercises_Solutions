@@ -1,0 +1,55 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description:
+--Inputs:
+--Outputs: 
+--****************************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+USE WORK.ALL;
+
+ENTITY part3 IS
+     PORT(
+          CLOCK_50 : IN STD_LOGIC;
+          SW       : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+          KEY      : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+          HEX0     : OUT STD_LOGIC_VECTOR(6 DOWNTO 0) := "1111111";
+          HEX1     : OUT STD_LOGIC_VECTOR(6 DOWNTO 0) := "1111111";
+          HEX2     : OUT STD_LOGIC_VECTOR(6 DOWNTO 0) := "1111111";
+          HEX3     : OUT STD_LOGIC_VECTOR(6 DOWNTO 0) := "1111111"
+         );
+END part3; 
+
+ARCHITECTURE structural OF part3 IS
+ 
+SIGNAL clk_gen0   : STD_LOGIC;
+SIGNAL clk_gen1   : STD_LOGIC;
+SIGNAL void_sig1  : STD_LOGIC;
+SIGNAL cnt_9to_s  : STD_LOGIC;
+SIGNAL cnt_9to_m  : STD_LOGIC;
+SIGNAL bcd_msb    : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL bcd_lsb    : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL m_msb_7seg : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL m_lsb_7seg : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL s_msb_7seg : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL s_lsb_7seg : STD_LOGIC_VECTOR(3 DOWNTO 0);
+SIGNAL void_sig0  : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+BEGIN
+
+freq_div     : freq_divider        PORT MAP(KEY(0), CLOCK_50, clk_gen0);
+freq_div_min : freq_divider_to_min PORT MAP(KEY(0), clk_gen0, clk_gen1);
+sec_0to9_gen : cnt_0to9_ms         PORT MAP(clk_gen0, KEY(0), void_sig0, s_lsb_7seg, cnt_9to_s);
+sec_0to6_gen : cnt_0to6_ms         PORT MAP(cnt_9to_s, KEY(0), void_sig0, s_msb_7seg, void_sig1);
+preset_bcd   : bcd_circuit         PORT MAP(SW(7 DOWNTO 0), bcd_lsb, bcd_msb);
+min_0to9_gen : cnt_0to9_ms         PORT MAP(clk_gen1, KEY(0), bcd_lsb, m_lsb_7seg, cnt_9to_m);
+min_0to6_gen : cnt_0to6_ms         PORT MAP(cnt_9to_m, KEY(0), bcd_msb, m_msb_7seg, void_sig1);
+display_hex0 : disp_7seg           PORT MAP(s_lsb_7seg, HEX0);
+display_hex1 : disp_7seg           PORT MAP(s_msb_7seg, HEX1); 
+display_hex2 : disp_7seg           PORT MAP(m_lsb_7seg, HEX2); 
+display_hex3 : disp_7seg           PORT MAP(m_msb_7seg, HEX3);      
+
+END structural;
