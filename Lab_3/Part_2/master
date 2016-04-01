@@ -1,0 +1,34 @@
+--***************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: This design creates a master-slave D flip-flop
+--Inputs: KEY1-0 
+--Outputs: LEDG3
+--****************************************************************
+Library IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+ENTITY master IS
+	PORT( 
+		KEY  : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+		LEDG : OUT STD_LOGIC_VECTOR(3 DOWNTO 2)
+		);
+END master;
+
+ARCHITECTURE structure OF master IS
+
+     COMPONENT slave
+          PORT(
+               d, clk : IN STD_LOGIC;
+               q      : OUT STD_LOGIC
+               );
+     END COMPONENT;
+
+     SIGNAL qm : STD_LOGIC;
+     
+BEGIN
+
+slave0 : slave PORT MAP (NOT(KEY(0)), KEY(1), qm);
+slave1 : slave PORT MAP (qm, KEY(1), LEDG(3));
+
+END structure;
