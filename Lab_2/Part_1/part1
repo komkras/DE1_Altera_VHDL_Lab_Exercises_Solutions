@@ -1,0 +1,35 @@
+--********************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: This design is used as a branch design for the top-level design. 
+--With SW9-0, yiels corresponding bit values to then been display in a 7-segment 
+--display as decimals.
+--Inputs: SW9-0
+--Outputs: HEX1-0
+--********************************************************************
+
+LIBRARY ieee;
+USE ieee.STD_LOGIC_1164.ALL;
+
+ENTITY part1 IS
+     PORT(
+          SW         : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+          HEX0, HEX1 : OUT STD_LOGIC_VECTOR(0 TO 6)
+          );
+END part1;
+
+ARCHITECTURE structural OF part1 IS
+
+     COMPONENT disp_7seg
+          PORT(
+               b       : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+               display : OUT STD_LOGIC_VECTOR(0 TO 6)
+               );
+     END COMPONENT;
+     
+BEGIN
+     
+     display1 : disp_7seg PORT MAP ( b => SW(7 DOWNTO 4), display => HEX1);
+     display0 : disp_7seg PORT MAP ( b => SW(3 DOWNTO 0), display => HEX0);
+
+END structural;
