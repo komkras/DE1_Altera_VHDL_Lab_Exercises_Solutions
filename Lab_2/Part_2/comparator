@@ -1,0 +1,31 @@
+--********************************************************************
+--Name: Carlos Virguez
+--Course Number: CET3136
+--Description: This design is used as a sub-branch design. 
+--With SW3-0, will yiels corresponding single bit value. If greater than 9 output is 1
+--else is 0.
+--Inputs: SW3-0
+--Outputs: c_out STD_LOGIC
+--********************************************************************
+
+LIBRARY ieee;
+USE ieee.STD_LOGIC_1164.ALL;
+
+ENTITY comparator IS
+     PORT(
+          c_in  : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+          c_out : OUT STD_LOGIC
+          );
+END comparator;
+
+ARCHITECTURE behavioral OF comparator IS
+BEGIN
+     PROCESS(c_in)
+          BEGIN
+               IF c_in > "1001" THEN
+                    c_out <= '1';
+               ELSE
+                    c_out <= '0';
+               END IF;
+     END PROCESS;
+END behavioral; 
